@@ -39,11 +39,25 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatManagerCore.cs" />
-    <Compile Include="ChatManagerUtilityMain.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="ChatManagerControllers\ChatManagerCore.cs" />
+    <Compile Include="ChatManagerControllers\ChatManagerUpdater.cs" />
+    <Compile Include="ChatManagerControllers\ChatManagerUtilityMain.cs" />
+    <Compile Include="Events\TeamMsgEventArgs.cs" />
+    <Compile Include="Events\PrivateMsgEventArgs.cs" />
+    <Compile Include="Events\LocalMsgEventArgs.cs" />
+    <Compile Include="MessageTypeHandlers\MessageTypeHandler.cs" />
+    <Compile Include="Commands\GlobalChatMessaging.cs" />
+    <Compile Include="Configs\Config.cs" />
+    <Compile Include="Events\GlobalMsgEventArgs.cs" />
+    <Compile Include="MessageTypeHandlers\MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,5 +65,6 @@
       <Version>5.2.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
