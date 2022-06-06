@@ -1,6 +1,5 @@
 ﻿using ChatManagerUtility.Events;
 using CommandSystem;
-using Exiled.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,25 +12,24 @@ namespace ChatManagerUtility
     //function that is ultimately called when the event is triggered.
     //You will notice that the second parameter is of MyEventArgs type.
     //This object will contain information about the triggered event.
-    public delegate void GlobalMsgEventHandler(GlobalMsgEventArgs ev);
+    public delegate void PrivateMsgEventHandler(PrivateMsgEventArgs ev);
 
     //https://stackoverflow.com/questions/623451/how-can-i-make-my-own-event-in-c
     [CommandHandler(typeof(ClientCommandHandler))]
-    class GlobalMessaging : ICommand
+    class PrivateMessaging : ICommand
     {
-        public string Command { get; } = "GlobalMessaging";
+        public string Command { get; } = "PrivateMessaging";
 
-        public string[] Aliases { get; } = { "g", "global" };
+        public string[] Aliases { get; } = { "p" };
 
-        public string Description { get; } = "GlobalMessaging Utility";
+        public string Description { get; } = "PrivateMessaging Utility";
 
-        public static event GlobalMsgEventHandler IncomingGlobalMessage;
+        public static event PrivateMsgEventHandler IncomingPrivateMessage;
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
-            if (IncomingGlobalMessage != null){
-                IncomingGlobalMessage(new GlobalMsgEventArgs(arguments.At(0)));
+            if(IncomingPrivateMessage != null){
+                IncomingPrivateMessage(new PrivateMsgEventArgs(arguments.At(0)));
             }
             response = "Assume it was good";
             return true;

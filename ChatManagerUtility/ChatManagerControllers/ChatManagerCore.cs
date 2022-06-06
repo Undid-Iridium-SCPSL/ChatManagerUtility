@@ -29,9 +29,9 @@ namespace ChatManagerUtility
         public void OnVerified(VerifiedEventArgs ev)
         {
             if(ev.Player != null){
-                ChatManagerUpdater chatManagerUpdater = new ChatManagerUpdater();
+                ChatManagerUpdater chatManagerUpdater = new ChatManagerUpdater(ev.Player);
                 //Thread thread = new Thread(new ThreadStart(ChatManagerParser));
-                ev.Player.SessionVariables.Add("ChatManagerThreadToken", chatManagerUpdater);
+                ev.Player.SessionVariables.Add("ChatManagerToken", chatManagerUpdater);
             }
         }
 
@@ -39,9 +39,9 @@ namespace ChatManagerUtility
         {
             if (ev.Player != null)
             {
-                if (ev.Player.SessionVariables.TryGetValue("ChatManagerThreadToken", out object manager)){
-                    ((ChatManagerUpdater)manager).shutdown();
-                    ev.Player.SessionVariables.Remove("ChatManagerEnabled");
+                if (ev.Player.SessionVariables.TryGetValue("ChatManagerToken", out object ChatManager)){
+                    ((ChatManagerUpdater)ChatManager).shutdown();
+                    ev.Player.SessionVariables.Remove("ChatManagerToken");
                 }
             }
         }

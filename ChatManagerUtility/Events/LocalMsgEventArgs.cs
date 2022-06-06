@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatManagerUtility.Configs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,16 +9,16 @@ namespace ChatManagerUtility.Events
 {
     //This is a class which describes the event to the class that recieves it.
     //An EventArgs class must always derive from System.EventArgs.
-    public class LocalMsgEventArgs : EventArgs
+    public class LocalMsgEventArgs : BaseEventArgs
     {
-        public string EventMessage;
-        public LocalMsgEventArgs(string Text)
+        private MessageType MessageType;
+        public LocalMsgEventArgs(string Text) : base(Text)
         {
-            EventMessage = Text;
+            MessageType = MessageType.Local;
         }
-        public string GetInfo()
+        public MessageType GetMsgType()
         {
-            return EventMessage;
+            return MessageType;
         }
     }
 }

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mirror">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +53,12 @@
     <Compile Include="ChatManagerControllers\ChatManagerCore.cs" />
     <Compile Include="ChatManagerControllers\ChatManagerUpdater.cs" />
     <Compile Include="ChatManagerControllers\ChatManagerUtilityMain.cs" />
+    <Compile Include="Commands\PrivateChatMessaging.cs" />
+    <Compile Include="Commands\TeamChatMessaging.cs" />
+    <Compile Include="Commands\LocalChatMessaging.cs" />
+    <Compile Include="Configs\LocationEnum.cs" />
+    <Compile Include="Configs\MessageType.cs" />
+    <Compile Include="Events\BaseEventArgs.cs" />
     <Compile Include="Events\TeamMsgEventArgs.cs" />
     <Compile Include="Events\PrivateMsgEventArgs.cs" />
     <Compile Include="Events\LocalMsgEventArgs.cs" />
@@ -57,7 +66,6 @@
     <Compile Include="Commands\GlobalChatMessaging.cs" />
     <Compile Include="Configs\Config.cs" />
     <Compile Include="Events\GlobalMsgEventArgs.cs" />
-    <Compile Include="MessageTypeHandlers\MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,4 +75,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if EXIST "C:\Users\tuxwo\AppData\Roaming\EXILED\Plugins\" (
+   copy /Y  "$(TargetPath)" "C:\Users\tuxwo\AppData\Roaming\EXILED\Plugins\$(TargetFileName)"
+  )</PostBuildEvent>
+  </PropertyGroup>
 </Project>

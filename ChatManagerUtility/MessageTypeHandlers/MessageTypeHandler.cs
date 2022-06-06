@@ -1,13 +1,16 @@
-﻿using UnityEngine;
+﻿using ChatManagerUtility.Configs;
+using UnityEngine;
 namespace ChatManagerUtility
 {
     public class MessageTypeHandler
     {
         readonly string InternalMsg;
-        readonly Time InternalMsgTime;
+        readonly float InternalMsgTime;
         readonly int InternalCharacterLimit;
+        readonly MessageType InternalMsgType;
 
-        public string Msg{
+        public string Msg
+        {
             get 
             { 
               if(InternalMsg.Length < InternalCharacterLimit)
@@ -17,7 +20,7 @@ namespace ChatManagerUtility
               return InternalMsg.Substring(0, InternalCharacterLimit);
             }
         }
-        public Time MsgTime
+        public float MsgTime
         {
             get
             {
@@ -25,10 +28,15 @@ namespace ChatManagerUtility
             }
         }
 
-        public MessageTypeHandler(string currentMessage, Time assignedMsgTime, int characterLimit){
-            InternalMsg = currentMessage;
+        public MessageType MsgType => InternalMsgType;
+
+        public MessageTypeHandler(string currentMessage, float assignedMsgTime, int characterLimit, MessageType messageType, string chatColor)
+        {
+            
             InternalMsgTime = assignedMsgTime;
             InternalCharacterLimit = characterLimit;
+            InternalMsgType = messageType;
+            InternalMsg = chatColor + currentMessage;
         }
 
         
