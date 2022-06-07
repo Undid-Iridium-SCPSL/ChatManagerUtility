@@ -33,7 +33,7 @@ namespace ChatManagerUtility
         private Player player { get; set; }
 
         private StringBuilder MsgToSend { get; set; }
-
+        public StringBuilder ConsoleMsgToSend { get; private set; }
         private int DisplayableLimit { get; set; }
 
         private int DisplayTimeLimit { get; set; }
@@ -67,6 +67,7 @@ namespace ChatManagerUtility
 
             player = currentPlayer;
             MsgToSend = new StringBuilder();
+            ConsoleMsgToSend = new StringBuilder();
             DisplayableLimit = ChatManagerUtilityMain.Instance.Config.DisplayLimit;
             DisplayTimeLimit = (int)(ChatManagerUtilityMain.Instance.Config.DisplayTimeLimit);
             TextPlacement = ChatManagerUtilityMain.Instance.Config.TextPlacement;
@@ -199,26 +200,42 @@ namespace ChatManagerUtility
         public void SendMessage()
         {
             //this.player.hint.add(msg);
-            this.player = Player.Get(this.player.Id);
-            MsgToSend.Append("</align>");
-            Log.Debug($"SendMessage entered, msg to send {MsgToSend} and Player {player is null}, Nickname {player?.Nickname}", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
-            //this.player.ShowHint("<line-height=75%><voffset=30em><align=center><color=#247BA0> hi </color> asdasdasd </align> </voffset>", 10);
-            this.player.ShowHint(MsgToSend.ToString());
-            MsgToSend.Clear();
-            switch (TextPlacement)
+            try
             {
-                case LocationEnum.Center:
-                    MsgToSend.Append("<align=\"center\">");
-                    break;
-                case LocationEnum.Right:
-                    MsgToSend.Append("<align=\"right\">");
-                    break;
-                case LocationEnum.Left:
-                default:
-                    MsgToSend.Append("<align=\"left\">");
-                    break;
+                this.player = Player.Get(this.player.Id);
+                MsgToSend.Append("</align>");
+                Log.Debug($"SendMessage entered, msg to send {MsgToSend} and Player {player is null}, Nickname {player?.Nickname}", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+                //this.player.ShowHint("<line-height=75%><voffset=30em><align=center><color=#247BA0> hi </color> asdasdasd </align> </voffset>", 10);
+                this.player.ShowHint(MsgToSend.ToString());
+
+                //this.player.ReferenceHub.queryProcessor.TargetReplyPlain(this.player.ReferenceHub.queryProcessor.connectionToClient, MsgToSend.ToString(), true, true, string.Empty);
+                //this.player.ReferenceHub.queryProcessor.TargetReply(this.player.ReferenceHub.queryProcessor.connectionToClient, MsgToSend.ToString(), true, true, string.Empty);
+                if (ConsoleMsgToSend.Length > 0)
+                {
+                    this.player.ReferenceHub.queryProcessor.GCT.SendToClient(this.player.ReferenceHub.queryProcessor.connectionToClient, ConsoleMsgToSend.ToString(), "green");
+                }
+                MsgToSend.Clear();
+                ConsoleMsgToSend.Clear();
+                ConsoleMsgToSend.Append("\n");
+
+                switch (TextPlacement)
+                {
+                    case LocationEnum.Center:
+                        MsgToSend.Append("<align=\"center\">");
+                        break;
+                    case LocationEnum.Right:
+                        MsgToSend.Append("<align=\"right\">");
+                        break;
+                    case LocationEnum.Left:
+                    default:
+                        MsgToSend.Append("<align=\"left\">");
+                        break;
+                }
+                Log.Debug($"SendMessage After send and clear.", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
             }
-            Log.Debug($"SendMessage After send and clear.", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+            catch (Exception ex){
+                Log.Debug($"Unable to send message {ex}", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+            }
         }
 
         public void AppendSendableHint(string msg){
@@ -243,6 +260,7 @@ namespace ChatManagerUtility
             while (!MessagesToDisplay.IsEmpty())
             {
                 MessageTypeHandler currentMessageHandler = MessagesToDisplay.Dequeue();
+                ConsoleMsgToSend.Append(currentMessageHandler.ConsoleMsg + "\n");
                 AppendSendableHint(currentMessageHandler.Msg + "\n");
                 Log.Debug($"Time.time {Time.time} vs {currentMessageHandler.MsgTime} equals {Time.time - currentMessageHandler.MsgTime} vs display limit {DisplayTimeLimit}");
                 if (Time.time - currentMessageHandler.MsgTime < DisplayTimeLimit){

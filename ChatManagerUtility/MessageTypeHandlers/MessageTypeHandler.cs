@@ -10,6 +10,8 @@ namespace ChatManagerUtility
         int InternalCharacterLimit { get; set; }
         MessageType InternalMsgType { get; set; }
 
+        public string ConsoleMsg { get; set; }
+
         public string Msg
         {
             get 
@@ -33,7 +35,7 @@ namespace ChatManagerUtility
             InternalMsgTime = assignedMsgTime - 0.1000f;
             InternalCharacterLimit = characterLimit;
             InternalMsgType = messageType;
-
+            ConsoleMsg = currentMessage;
             if (currentMessage.Length > InternalCharacterLimit)
             {
                 currentMessage = currentMessage.Substring(0, InternalCharacterLimit);
