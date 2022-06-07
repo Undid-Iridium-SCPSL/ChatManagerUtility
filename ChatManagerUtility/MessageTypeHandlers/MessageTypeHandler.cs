@@ -29,18 +29,18 @@ namespace ChatManagerUtility
 
         public MessageType MsgType => InternalMsgType;
 
-        public MessageTypeHandler(string currentMessage, float assignedMsgTime, int characterLimit, MessageType messageType, string chatColor)
+        public MessageTypeHandler(string currentMessage, float assignedMsgTime, int characterLimit, MessageType messageType, string chatColor, string msgSize)
         {
             
             InternalMsgTime = assignedMsgTime - 0.1000f;
             InternalCharacterLimit = characterLimit;
             InternalMsgType = messageType;
-            ConsoleMsg = currentMessage;
+            ConsoleMsg = currentMessage.Substring(0, 256);
             if (currentMessage.Length > InternalCharacterLimit)
             {
                 currentMessage = currentMessage.Substring(0, InternalCharacterLimit);
             }
-            string temp = chatColor + "<size=40%>" + currentMessage + "</color>";
+            string temp = chatColor + msgSize + currentMessage + "</color>";
             InternalMsg = temp;
             //Log.Info($"What in the HELL was the current msg {InternalMsg}  vs temp {temp} and chat color {chatColor} and original msg {currentMessage}");
         }

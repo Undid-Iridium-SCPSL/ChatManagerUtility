@@ -38,9 +38,14 @@ namespace ChatManagerUtility
             try
             {
                 Player player = Player.Get(sender);
+                if (player.Role.Type is RoleType.Spectator)
+                {
+                    response = "Local Message cannot be sent while in spectator mode.";
+                    return false;
+                }
                 String nameToShow = player.Nickname.Length < 6 ? player.Nickname : player.Nickname.Substring(0, (player.Nickname.Length / 3) + 1);
                 IncomingTeamMessage?.Invoke(new TeamMsgEventArgs($"[T][{nameToShow}]:" + String.Join(" ", arguments.ToList()), player));
-                response = "Message has been processed.";
+                response = "Team Message has been processed.";
                 return true;
             }
             catch (Exception ex){

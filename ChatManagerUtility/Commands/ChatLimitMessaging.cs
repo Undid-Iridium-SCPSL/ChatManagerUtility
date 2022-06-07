@@ -26,11 +26,11 @@ namespace ChatManagerUtility.Commands
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if(arguments.Count == 0){
-                response = "You must provide one parameter modify subscription, Options are: GLOBAL, LOCAL, PRIVATE, TEAM ";
+                response = "You must provide one parameter modify subscription, Options are: global, local, private, team ";
                 return false;
             }
             Player player = Player.Get(sender);
-            if(Enum.TryParse(arguments.At(0), out MessageType channel)){
+            if(Enum.TryParse(arguments.At(0).ToUpper(), out MessageType channel)){
                 IncomingChatLimitMessage?.Invoke(new ChatLimitEventArgs(arguments.At(0), player, channel));
                 response = "Message has been accepted";
                 return true;

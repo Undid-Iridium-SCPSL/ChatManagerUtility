@@ -40,11 +40,11 @@ namespace ChatManagerUtility
                 Player player = Player.Get(sender);
                 String nameToShow = player.Nickname.Length < 6 ? player.Nickname : player.Nickname.Substring(0, (player.Nickname.Length / 3) + 1);
                 IncomingGlobalMessage?.Invoke(new GlobalMsgEventArgs($"[G][{nameToShow}]:" + String.Join(" ", arguments.ToList()), player));
-                response = "Assume it was good";
+                response = "Global Message has been accepted";
                 return true;
             }
             catch (Exception ex){
-                response = $"Unable to send TeamMessaging because of {ex}";
+                response = $"Unable to send Global Message because of {ex}";
             }
             return false;
         }

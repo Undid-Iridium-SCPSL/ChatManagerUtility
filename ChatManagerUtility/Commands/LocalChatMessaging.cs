@@ -35,15 +35,20 @@ namespace ChatManagerUtility
                 return false;
             }
 
+
             try{ 
                 Player player = Player.Get(sender);
+                if(player.Role.Type is RoleType.Spectator){
+                    response = "Local Message cannot be sent while in spectator mode.";
+                    return false;
+                }
                 String nameToShow = player.Nickname.Length < 6 ? player.Nickname : player.Nickname.Substring(0, (player.Nickname.Length / 3) + 1);
                 IncomingLocalMessage?.Invoke(new LocalMsgEventArgs($"[L][{nameToShow}]:" + String.Join(" ", arguments.ToList()), player));
-                response = "Assume it was good";
+                response = "Local Message has been accepted";
                 return true;
             }
             catch (Exception ex){
-                response = $"Unable to send TeamMessaging because of {ex}";
+                response = $"Unable to send LocalMessaging because of {ex}";
             }
             return false;
         }

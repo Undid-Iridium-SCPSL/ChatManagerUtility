@@ -38,19 +38,27 @@ namespace ChatManagerUtility
         
 
             try{
+                Player player = Player.Get(sender);
+                Player targetPlayer = Player.Get(arguments.At(0));
+                if (player.Role.Type is RoleType.Spectator && targetPlayer.Role.Type != RoleType.Spectator)
+                {
+                    response = "Private Message cannot be sent while in spectator mode to a non-spectator Player.";
+                    return false;
+                }
+
                 StringBuilder sb = new StringBuilder();
                 for (int pos = 1; pos < arguments.Count; pos++)
                 {
                     sb.Append(arguments.At(pos));
                     sb.Append(" ");
                 }
-                Player player = Player.Get(sender);
-                IncomingPrivateMessage?.Invoke(new PrivateMsgEventArgs($"[P][{player.Nickname}]:" + sb.ToString(), player, Player.Get(arguments.At(0))));
-                response = "Assume it was good";
+                
+                IncomingPrivateMessage?.Invoke(new PrivateMsgEventArgs($"[P][{player.Nickname}]:" + sb.ToString(), player, targetPlayer));
+                response = "Private Message has been accepted";
                 return true;
             }
             catch (Exception ex){
-                response = $"Unable to send TeamMessaging because of {ex}";
+                response = $"Unable to send PrivateMessaging because of {ex}";
             }
             return false;
         }

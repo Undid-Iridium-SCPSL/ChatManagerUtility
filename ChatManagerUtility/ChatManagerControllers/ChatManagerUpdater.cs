@@ -42,6 +42,8 @@ namespace ChatManagerUtility
 
         private HashSet<MessageType> ConsumerTypes { get; set; }
 
+        private String SizeOfText { get; set; }
+
         readonly ChatColors chatColors;
 
         public ChatManagerUpdater(Player currentPlayer)
@@ -71,6 +73,8 @@ namespace ChatManagerUtility
             DisplayableLimit = ChatManagerUtilityMain.Instance.Config.DisplayLimit;
             DisplayTimeLimit = (int)(ChatManagerUtilityMain.Instance.Config.DisplayTimeLimit);
             TextPlacement = ChatManagerUtilityMain.Instance.Config.TextPlacement;
+
+            SizeOfText = ChatManagerUtilityMain.Instance.Config.SizeOfHintText;
 
             switch (TextPlacement) {
                 case LocationEnum.Center:
@@ -149,13 +153,13 @@ namespace ChatManagerUtility
         private void ConsumeGlobalMessage(GlobalMsgEventArgs ev)
         {
             Log.Debug($"ConsumeGlobalMessage loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
-            AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType())));
+            AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType()), SizeOfText));
             Log.Debug($"ConsumeGlobalMessage Finished loading in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }
         private void ConsumeLocalMessage(LocalMsgEventArgs ev)
         {
             Log.Debug($"ConsumeLocalMessage loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
-            AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType())));
+            AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType()), SizeOfText));
             Log.Debug($"ConsumeLocalMessage Finished loading in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }
 
@@ -165,13 +169,13 @@ namespace ChatManagerUtility
             if(ev.PlayerToMsg() != this.player){
                 return;
             }
-            AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType())));
+            AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType()), SizeOfText));
             Log.Debug($"ConsumePrivateMessage Finished loading in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }
         private void ConsumeTeamMessage(TeamMsgEventArgs ev)
         {
             Log.Debug($"ConsumeTeamMessage loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
-            AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType())));
+            AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType()), SizeOfText));
             Log.Debug($"ConsumeTeamMessage Finished loading in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }
 
@@ -210,7 +214,7 @@ namespace ChatManagerUtility
 
                 //this.player.ReferenceHub.queryProcessor.TargetReplyPlain(this.player.ReferenceHub.queryProcessor.connectionToClient, MsgToSend.ToString(), true, true, string.Empty);
                 //this.player.ReferenceHub.queryProcessor.TargetReply(this.player.ReferenceHub.queryProcessor.connectionToClient, MsgToSend.ToString(), true, true, string.Empty);
-                if (ConsoleMsgToSend.Length > 0)
+                if (ConsoleMsgToSend.Length > 5)
                 {
                     this.player.ReferenceHub.queryProcessor.GCT.SendToClient(this.player.ReferenceHub.queryProcessor.connectionToClient, ConsoleMsgToSend.ToString(), "green");
                 }

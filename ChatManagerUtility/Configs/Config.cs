@@ -42,7 +42,7 @@ namespace ChatManagerUtility
         /// </summary>
         [Description("Chat colors instance")]
         public ChatColors AssociatedChatColors { get; set; } = new ChatColors();
-
+        public string SizeOfHintText { get; set; } = "<size=50%>";
 
         [Description("Chat colors")]
         public class ChatColors {
