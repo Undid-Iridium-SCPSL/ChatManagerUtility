@@ -31,7 +31,7 @@ namespace ChatManagerUtility
         {
             if(IncomingLocalMessage != null){
                 Log.Info($"Argument at 0 {arguments.At(0)}");
-                IncomingLocalMessage(new LocalMsgEventArgs(arguments.At(0)));
+                IncomingLocalMessage(new LocalMsgEventArgs("[L]:" + arguments.At(0)));
             }
             response = "Assume it was good";
             return true;

@@ -29,7 +29,7 @@ namespace ChatManagerUtility
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if(IncomingTeamMessage != null){
-                IncomingTeamMessage(new TeamMsgEventArgs(arguments.At(0)));
+                IncomingTeamMessage(new TeamMsgEventArgs("[T]:" + arguments.At(0)));
             }
             response = "Assume it was good";
             return true;

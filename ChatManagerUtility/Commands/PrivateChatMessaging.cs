@@ -20,7 +20,7 @@ namespace ChatManagerUtility
     {
         public string Command { get; } = "PrivateMessaging";
 
-        public string[] Aliases { get; } = { "p" };
+        public string[] Aliases { get; } = { "p", "private" };
 
         public string Description { get; } = "PrivateMessaging Utility";
 
@@ -29,7 +29,7 @@ namespace ChatManagerUtility
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if(IncomingPrivateMessage != null){
-                IncomingPrivateMessage(new PrivateMsgEventArgs(arguments.At(0)));
+                IncomingPrivateMessage(new PrivateMsgEventArgs("[P]:" + arguments.At(0)));
             }
             response = "Assume it was good";
             return true;

@@ -31,7 +31,7 @@ namespace ChatManagerUtility
         {
             Player player = Player.Get(sender);
             if (IncomingGlobalMessage != null){
-                IncomingGlobalMessage(new GlobalMsgEventArgs(arguments.At(0)));
+                IncomingGlobalMessage(new GlobalMsgEventArgs("[G]:" + arguments.At(0)));
             }
             response = "Assume it was good";
             return true;

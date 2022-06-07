@@ -21,9 +21,9 @@ namespace ChatManagerUtility
 
         public CancellationTokenSource cancellationToken;
 
-        public Queue<MessageTypeHandler> AllIncomingMessages;
+        public Queue<MessageTypeHandler> AllIncomingMessages { get; set; }
 
-        public Queue<MessageTypeHandler> MessagesToDisplay;
+        public Queue<MessageTypeHandler> MessagesToDisplay { get; set; }
 
         private int SleepTime { get; set; } = 3500;
 
@@ -60,15 +60,15 @@ namespace ChatManagerUtility
             player = currentPlayer;
             MsgToSend = new StringBuilder();
             DisplayableLimit = ChatManagerUtilityMain.Instance.Config.DisplayLimit;
-            DisplayTimeLimit = (int)(ChatManagerUtilityMain.Instance.Config.DisplayTimeLimit * 1000);
+            DisplayTimeLimit = (int)(ChatManagerUtilityMain.Instance.Config.DisplayTimeLimit);
             TextPlacement = ChatManagerUtilityMain.Instance.Config.TextPlacement;
 
             switch (TextPlacement) {
                 case LocationEnum.Center:
-                    MsgToSend.Append("<align=\"center\">");
+                    MsgToSend.Append("<align=\"center>\"");
                     break;
                 case LocationEnum.Right:
-                    MsgToSend.Append("<align=\"right\">");
+                    MsgToSend.Append("<align=\"right>\"");
                     break;
                 case LocationEnum.Left:
                 default:
@@ -136,10 +136,24 @@ namespace ChatManagerUtility
         {
             //this.player.hint.add(msg);
             this.player = Player.Get(this.player.Id);
+            MsgToSend.Append("</align>");
             Log.Debug($"SendMessage entered, msg to send {MsgToSend} and Player {player is null}, Nickname {player?.Nickname}", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
             //this.player.ShowHint("<line-height=75%><voffset=30em><align=center><color=#247BA0> hi </color> asdasdasd </align> </voffset>", 10);
             this.player.ShowHint(MsgToSend.ToString());
             MsgToSend.Clear();
+            switch (TextPlacement)
+            {
+                case LocationEnum.Center:
+                    MsgToSend.Append("<align=\"center>\"");
+                    break;
+                case LocationEnum.Right:
+                    MsgToSend.Append("<align=\"right>\"");
+                    break;
+                case LocationEnum.Left:
+                default:
+                    MsgToSend.Append("<align=\"left\">");
+                    break;
+            }
             Log.Debug($"SendMessage After send and clear.", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }
 
@@ -165,15 +179,23 @@ namespace ChatManagerUtility
             while (!MessagesToDisplay.IsEmpty())
             {
                 MessageTypeHandler currentMessageHandler = MessagesToDisplay.Dequeue();
-                AppendSendableHint(currentMessageHandler.Msg);
+                AppendSendableHint(currentMessageHandler.Msg + "\n");
+                Log.Debug($"Time.time {Time.time} vs {currentMessageHandler.MsgTime} equals {Time.time - currentMessageHandler.MsgTime} vs display limit {DisplayTimeLimit}");
                 if (Time.time - currentMessageHandler.MsgTime < DisplayTimeLimit){
-                    messagesToRetain.Append(currentMessageHandler);
+
+                    messagesToRetain.Enqueue(currentMessageHandler);
+                   
                 }
             }
-            Log.Debug($"ProcessQueue, MessagesToDisplay iterated, and finished.", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+            Log.Debug($"ProcessQueue, MessagesToDisplay iterated, and finished. How big was messagesToRetain {messagesToRetain.Count}", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+            //while(messagesToRetain.Count > 0)
+            //{
+            //    Log.Debug("Retaining message iteratively!!!");
+            //    MessagesToDisplay.Enqueue(messagesToRetain.Dequeue());
+            //}
             MessagesToDisplay = messagesToRetain;
             SendMessage();
-            Log.Debug($"ProcessQueue finished.", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+            Log.Debug($"ProcessQueue finished. Size of queue {MessagesToDisplay.Count}", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }
 
         internal void shutdown()

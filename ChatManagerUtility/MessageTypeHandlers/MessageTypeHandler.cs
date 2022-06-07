@@ -34,12 +34,12 @@ namespace ChatManagerUtility
         public MessageTypeHandler(string currentMessage, float assignedMsgTime, int characterLimit, MessageType messageType, string chatColor)
         {
             
-            InternalMsgTime = assignedMsgTime;
+            InternalMsgTime = assignedMsgTime - 0.1000f;
             InternalCharacterLimit = characterLimit;
             InternalMsgType = messageType;
             string temp = chatColor + currentMessage + "</color>";
             InternalMsg = temp;
-            Log.Info($"What in the HELL was the current msg {InternalMsg}  vs temp {temp} and chat color {chatColor} and original msg {currentMessage}");
+            //Log.Info($"What in the HELL was the current msg {InternalMsg}  vs temp {temp} and chat color {chatColor} and original msg {currentMessage}");
         }
 
 

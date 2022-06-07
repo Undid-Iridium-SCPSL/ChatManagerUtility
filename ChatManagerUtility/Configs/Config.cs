@@ -48,7 +48,7 @@ namespace ChatManagerUtility
         public class ChatColors {
 
             [Description("Global chat color - Use hex to assign the color.")]
-            public string GlobalChatColor { get; set; } = "<color=#0D0630> ";
+            public string GlobalChatColor { get; set; } = "<color=#85C7F2> ";
 
             [Description("Local chat color - Use hex to assign the color.")]
             public string LocalChatColor { get; set; } = "<color=#85C7F2> ";
