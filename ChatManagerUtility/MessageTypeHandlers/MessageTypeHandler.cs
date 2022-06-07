@@ -14,11 +14,7 @@ namespace ChatManagerUtility
         {
             get 
             { 
-              if(InternalMsg.Length < InternalCharacterLimit)
-                {
-                  return InternalMsg;
-              }
-              return InternalMsg.Substring(0, InternalCharacterLimit);
+              return InternalMsg;
             }
         }
         public float MsgTime
@@ -37,7 +33,12 @@ namespace ChatManagerUtility
             InternalMsgTime = assignedMsgTime - 0.1000f;
             InternalCharacterLimit = characterLimit;
             InternalMsgType = messageType;
-            string temp = chatColor + currentMessage + "</color>";
+
+            if (currentMessage.Length > InternalCharacterLimit)
+            {
+                currentMessage = currentMessage.Substring(0, InternalCharacterLimit);
+            }
+            string temp = chatColor + "<size=40%>" + currentMessage + "</color>";
             InternalMsg = temp;
             //Log.Info($"What in the HELL was the current msg {InternalMsg}  vs temp {temp} and chat color {chatColor} and original msg {currentMessage}");
         }

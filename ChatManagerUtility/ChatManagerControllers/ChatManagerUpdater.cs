@@ -1,4 +1,5 @@
-﻿using ChatManagerUtility.Configs;
+﻿using ChatManagerUtility.Commands;
+using ChatManagerUtility.Configs;
 using ChatManagerUtility.Events;
 using Exiled.API.Features;
 using System;
@@ -39,6 +40,8 @@ namespace ChatManagerUtility
 
         private LocationEnum TextPlacement { get; set; }
 
+        private HashSet<MessageType> ConsumerTypes { get; set; }
+
         readonly ChatColors chatColors;
 
         public ChatManagerUpdater(Player currentPlayer)
@@ -48,15 +51,20 @@ namespace ChatManagerUtility
             Log.Debug($"ChatManagerUpdater loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
             cancellationToken = new CancellationTokenSource();
             isRunning = true;
+
             GlobalMessaging.IncomingGlobalMessage += this.ConsumeGlobalMessage;
             LocalMessaging.IncomingLocalMessage += this.ConsumeLocalMessage;
             PrivateMessaging.IncomingPrivateMessage += this.ConsumePrivateMessage;
             TeamMessaging.IncomingTeamMessage += this.ConsumeTeamMessage;
+            ChatLimitMessaging.IncomingChatLimitMessage += this.ConsumeChatLimit;
+            ConsumerTypes = new HashSet<MessageType> { MessageType.GLOBAL, MessageType.LOCAL, MessageType.PRIVATE, MessageType.TEAM };
+
 
             AllIncomingMessages = new Queue<MessageTypeHandler>();
             MessagesToDisplay = new Queue<MessageTypeHandler>();
             SleepTime = (int)(ChatManagerUtilityMain.Instance.Config.SleepTime * 1000);
             CharacterLimit = ChatManagerUtilityMain.Instance.Config.CharacterLimit;
+
             player = currentPlayer;
             MsgToSend = new StringBuilder();
             DisplayableLimit = ChatManagerUtilityMain.Instance.Config.DisplayLimit;
@@ -65,10 +73,10 @@ namespace ChatManagerUtility
 
             switch (TextPlacement) {
                 case LocationEnum.Center:
-                    MsgToSend.Append("<align=\"center>\"");
+                    MsgToSend.Append("<align=\"center\">");
                     break;
                 case LocationEnum.Right:
-                    MsgToSend.Append("<align=\"right>\"");
+                    MsgToSend.Append("<align=\"right\">");
                     break;
                 case LocationEnum.Left:
                 default:
@@ -82,6 +90,59 @@ namespace ChatManagerUtility
             currentRunningThread = new Thread(() => ChatManager(cancellationToken.Token, this));
             currentRunningThread.Start();
 
+        }
+
+        private void ConsumeChatLimit(ChatLimitEventArgs ev)
+        {
+            Log.Debug($"ConsumeGlobalMessage loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+
+            //switch(ev.ChannelToChangeSubscription){
+            //    case MessageType.GLOBAL:
+            //        break;
+            //}
+
+            if(ev.GetPlayer() != this.player){
+                return;
+            }
+
+            if (ConsumerTypes.Contains(ev.ChannelToChangeSubscription))
+            {
+                switch (ev.ChannelToChangeSubscription)
+                {
+                    case MessageType.GLOBAL:
+                        GlobalMessaging.IncomingGlobalMessage -= this.ConsumeGlobalMessage;
+                        break;
+                    case MessageType.LOCAL:
+                        LocalMessaging.IncomingLocalMessage -= this.ConsumeLocalMessage;
+                        break;
+                    case MessageType.TEAM:
+                        PrivateMessaging.IncomingPrivateMessage -= this.ConsumePrivateMessage;
+                        break;
+                    case MessageType.PRIVATE:
+                        TeamMessaging.IncomingTeamMessage -= this.ConsumeTeamMessage;
+                        break;
+                }
+                ConsumerTypes.Remove(ev.ChannelToChangeSubscription);
+            }
+            else{
+                switch (ev.ChannelToChangeSubscription)
+                {
+                    case MessageType.GLOBAL:
+                        GlobalMessaging.IncomingGlobalMessage += this.ConsumeGlobalMessage;
+                        break;
+                    case MessageType.LOCAL:
+                        LocalMessaging.IncomingLocalMessage += this.ConsumeLocalMessage;
+                        break;
+                    case MessageType.TEAM:
+                        PrivateMessaging.IncomingPrivateMessage += this.ConsumePrivateMessage;
+                        break;
+                    case MessageType.PRIVATE:
+                        TeamMessaging.IncomingTeamMessage += this.ConsumeTeamMessage;
+                        break;
+                }
+                ConsumerTypes.Add(ev.ChannelToChangeSubscription);
+            }
+            Log.Debug($"ConsumeGlobalMessage Finished loading in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }
 
         private void ConsumeGlobalMessage(GlobalMsgEventArgs ev)
@@ -100,6 +161,9 @@ namespace ChatManagerUtility
         private void ConsumePrivateMessage(PrivateMsgEventArgs ev)
         {
             Log.Debug($"ConsumePrivateMessage loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+            if(ev.PlayerToMsg() != this.player){
+                return;
+            }
             AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType())));
             Log.Debug($"ConsumePrivateMessage Finished loading in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }
@@ -144,10 +208,10 @@ namespace ChatManagerUtility
             switch (TextPlacement)
             {
                 case LocationEnum.Center:
-                    MsgToSend.Append("<align=\"center>\"");
+                    MsgToSend.Append("<align=\"center\">");
                     break;
                 case LocationEnum.Right:
-                    MsgToSend.Append("<align=\"right>\"");
+                    MsgToSend.Append("<align=\"right\">");
                     break;
                 case LocationEnum.Left:
                 default:

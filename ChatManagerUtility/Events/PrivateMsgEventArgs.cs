@@ -1,4 +1,5 @@
 ﻿using ChatManagerUtility.Configs;
+using Exiled.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,18 @@ namespace ChatManagerUtility.Events
     public class PrivateMsgEventArgs : BaseEventArgs
     {
         private MessageType MessageType;
-        public PrivateMsgEventArgs(string Text) : base(Text)
+        private Player playerToMsg;
+        public PrivateMsgEventArgs(string Text, Player currentPlayer, Player playerToMessage) : base(Text, currentPlayer)
         {
-            MessageType = MessageType.Private;
+            MessageType = MessageType.PRIVATE;
+            playerToMsg = playerToMessage;
         }
+
+        public Player PlayerToMsg()
+        {
+            return playerToMsg;
+        }
+
         public MessageType GetMsgType()
         {
             return MessageType;

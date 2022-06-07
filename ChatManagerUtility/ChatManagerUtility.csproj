@@ -56,12 +56,14 @@
     <Compile Include="ChatManagerControllers\ChatManagerCore.cs" />
     <Compile Include="ChatManagerControllers\ChatManagerUpdater.cs" />
     <Compile Include="ChatManagerControllers\ChatManagerUtilityMain.cs" />
+    <Compile Include="Commands\ChatLimitMessaging.cs" />
     <Compile Include="Commands\PrivateChatMessaging.cs" />
     <Compile Include="Commands\TeamChatMessaging.cs" />
     <Compile Include="Commands\LocalChatMessaging.cs" />
     <Compile Include="Configs\LocationEnum.cs" />
     <Compile Include="Configs\MessageType.cs" />
     <Compile Include="Events\BaseEventArgs.cs" />
+    <Compile Include="Events\ChatLimitEventArgs.cs" />
     <Compile Include="Events\TeamMsgEventArgs.cs" />
     <Compile Include="Events\PrivateMsgEventArgs.cs" />
     <Compile Include="Events\LocalMsgEventArgs.cs" />

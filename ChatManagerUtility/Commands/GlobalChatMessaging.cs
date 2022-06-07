@@ -29,12 +29,24 @@ namespace ChatManagerUtility
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
-            if (IncomingGlobalMessage != null){
-                IncomingGlobalMessage(new GlobalMsgEventArgs("[G]:" + arguments.At(0)));
+
+            if (arguments.Count == 0)
+            {
+                response = "You must provide a message to send";
+                return false;
             }
-            response = "Assume it was good";
-            return true;
+
+            try{ 
+                Player player = Player.Get(sender);
+                String nameToShow = player.Nickname.Length < 6 ? player.Nickname : player.Nickname.Substring(0, (player.Nickname.Length / 3) + 1);
+                IncomingGlobalMessage?.Invoke(new GlobalMsgEventArgs($"[G][{nameToShow}]:" + String.Join(" ", arguments.ToList()), player));
+                response = "Assume it was good";
+                return true;
+            }
+            catch (Exception ex){
+                response = $"Unable to send TeamMessaging because of {ex}";
+            }
+            return false;
         }
     }
 }

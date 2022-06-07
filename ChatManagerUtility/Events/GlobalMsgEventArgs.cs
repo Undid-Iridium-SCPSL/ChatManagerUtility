@@ -12,9 +12,9 @@ namespace ChatManagerUtility.Events
     public class GlobalMsgEventArgs : BaseEventArgs
     {
         private MessageType MessageType;
-        public GlobalMsgEventArgs(string Text) : base(Text)
+        public GlobalMsgEventArgs(string Text, Exiled.API.Features.Player player) : base(Text, player)
         {
-            MessageType = MessageType.Global;
+            MessageType = MessageType.GLOBAL;
         }
         public MessageType GetMsgType()
         {

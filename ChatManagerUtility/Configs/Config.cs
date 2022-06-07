@@ -26,7 +26,7 @@ namespace ChatManagerUtility
         /// 
         /// </summary>
         [Description("Amount of characters per line to show")]
-        public int CharacterLimit { get; set; } = 128;
+        public int CharacterLimit { get; set; } = 64;
 
         [Description("Amount of lines to show")]
         public int DisplayLimit { get; set; } = 15;
@@ -63,13 +63,13 @@ namespace ChatManagerUtility
 
             internal string ParseColor(MessageType type){
                 switch(type){
-                    case MessageType.Global:
+                    case MessageType.GLOBAL:
                         return GlobalChatColor;
-                    case MessageType.Local:
+                    case MessageType.LOCAL:
                         return LocalChatColor;
-                    case MessageType.Private:
+                    case MessageType.PRIVATE:
                         return PrivateChatColor;
-                    case MessageType.Team:
+                    case MessageType.TEAM:
                         return TeamChatColor;
                     default:
                         return "<color=#4C4C4C> ";

@@ -12,9 +12,9 @@ namespace ChatManagerUtility.Events
     public class LocalMsgEventArgs : BaseEventArgs
     {
         private MessageType MessageType;
-        public LocalMsgEventArgs(string Text) : base(Text)
+        public LocalMsgEventArgs(string Text, Exiled.API.Features.Player player) : base(Text, player)
         {
-            MessageType = MessageType.Local;
+            MessageType = MessageType.LOCAL;
         }
         public MessageType GetMsgType()
         {

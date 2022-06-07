@@ -8,9 +8,9 @@ namespace ChatManagerUtility.Configs
 {
     public enum MessageType
     {
-        Global,
-        Local,
-        Private,
-        Team
+        GLOBAL,
+        LOCAL,
+        PRIVATE,
+        TEAM
     }
 }

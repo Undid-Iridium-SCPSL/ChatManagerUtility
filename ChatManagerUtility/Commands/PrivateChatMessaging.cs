@@ -1,5 +1,6 @@
 ﻿using ChatManagerUtility.Events;
 using CommandSystem;
+using Exiled.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +29,30 @@ namespace ChatManagerUtility
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if(IncomingPrivateMessage != null){
-                IncomingPrivateMessage(new PrivateMsgEventArgs("[P]:" + arguments.At(0)));
+            if (arguments.Count == 0)
+            {
+                response = "You must provide a message to send";
+                return false;
             }
-            response = "Assume it was good";
-            return true;
+
+        
+
+            try{
+                StringBuilder sb = new StringBuilder();
+                for (int pos = 1; pos < arguments.Count; pos++)
+                {
+                    sb.Append(arguments.At(pos));
+                    sb.Append(" ");
+                }
+                Player player = Player.Get(sender);
+                IncomingPrivateMessage?.Invoke(new PrivateMsgEventArgs($"[P][{player.Nickname}]:" + sb.ToString(), player, Player.Get(arguments.At(0))));
+                response = "Assume it was good";
+                return true;
+            }
+            catch (Exception ex){
+                response = $"Unable to send TeamMessaging because of {ex}";
+            }
+            return false;
         }
     }
 }

@@ -12,9 +12,9 @@ namespace ChatManagerUtility.Events
     public class TeamMsgEventArgs : BaseEventArgs
     {
         private MessageType MessageType;
-        public TeamMsgEventArgs(string Text) : base(Text)
+        public TeamMsgEventArgs(string Text, Exiled.API.Features.Player player) : base(Text, player)
         {
-            MessageType = MessageType.Team;
+            MessageType = MessageType.TEAM;
         }
         public MessageType GetMsgType()
         {
