@@ -159,7 +159,14 @@ namespace ChatManagerUtility
         private void ConsumeLocalMessage(LocalMsgEventArgs ev)
         {
             Log.Debug($"ConsumeLocalMessage loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
-            AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType()), SizeOfText));
+            
+            Player eventPlayer = ev.GetPlayer();
+
+            float num2 = Vector3.Distance(eventPlayer.ReferenceHub.transform.position, this.player.ReferenceHub.transform.position);
+            if (num2 <= 9f)
+            {
+                AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType()), SizeOfText));
+            }
             Log.Debug($"ConsumeLocalMessage Finished loading in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }
 
@@ -175,6 +182,10 @@ namespace ChatManagerUtility
         private void ConsumeTeamMessage(TeamMsgEventArgs ev)
         {
             Log.Debug($"ConsumeTeamMessage loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+            if (ev.GetPlayer().Role.Side != this.player.Role.Side)
+            {
+                return;
+            }
             AllIncomingMessages.Enqueue(new MessageTypeHandler(ev.GetMessage(), Time.time, CharacterLimit, ev.GetMsgType(), chatColors.ParseColor(ev.GetMsgType()), SizeOfText));
             Log.Debug($"ConsumeTeamMessage Finished loading in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
         }

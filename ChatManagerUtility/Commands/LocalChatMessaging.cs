@@ -29,12 +29,20 @@ namespace ChatManagerUtility
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            
+            if(!ChatManagerUtilityMain.Instance.Config.MsgTypesAllowed.Contains(Configs.MessageType.LOCAL))
+            {
+                response = "This has been disabled by an administrator. Contact them to enable local chat.";
+                return false;
+            }
+
             if (arguments.Count == 0)
             {
                 response = "You must provide a message to send";
                 return false;
             }
 
+           
 
             try{ 
                 Player player = Player.Get(sender);

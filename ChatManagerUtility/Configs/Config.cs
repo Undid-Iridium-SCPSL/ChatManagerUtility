@@ -42,7 +42,12 @@ namespace ChatManagerUtility
         /// </summary>
         [Description("Chat colors instance")]
         public ChatColors AssociatedChatColors { get; set; } = new ChatColors();
+
+        [Description("Size of the text to show")]
         public string SizeOfHintText { get; set; } = "<size=50%>";
+
+        [Description("Whether to allow type of messages, if not specified then it will be ignored and commands for it rejected.")]
+        public HashSet<MessageType> MsgTypesAllowed { get; set; } = new HashSet<MessageType>() { MessageType.GLOBAL, MessageType.LOCAL, MessageType.PRIVATE, MessageType.TEAM };
 
         [Description("Chat colors")]
         public class ChatColors {
