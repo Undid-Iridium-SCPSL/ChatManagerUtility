@@ -11,9 +11,6 @@ namespace ChatManagerUtility
 {
     public class Config : IConfig
     {
-        [Description("How long to sleep on every iteration before consuming more messages (In seconds).")]
-        public float SleepTime { get; set; } = 3f;
-
         /// <inheritdoc />
         [Description("Whether to enabled or disable plugin")]
         public bool IsEnabled { get; set; } = true;
@@ -21,6 +18,9 @@ namespace ChatManagerUtility
         /// <inheritdoc />
         [Description("Whether to enabled/disable debug")]
         public bool IsDebugEnabled { get; set; } = false;
+
+        [Description("How long to sleep on every iteration before consuming more messages (In seconds).")]
+        public float SleepTime { get; set; } = 3f;
 
         /// <summary>
         /// 
@@ -48,16 +48,16 @@ namespace ChatManagerUtility
         public class ChatColors {
 
             [Description("Global chat color - Use hex to assign the color.")]
-            public string GlobalChatColor { get; set; } = "#0D0630";
+            public string GlobalChatColor { get; set; } = "<color=#0D0630> ";
 
             [Description("Local chat color - Use hex to assign the color.")]
-            public string LocalChatColor { get; set; } = "#18314F";
+            public string LocalChatColor { get; set; } = "<color=#85C7F2> ";
 
             [Description("Private chat color - Use hex to assign the color.")]
-            public string PrivateChatColor { get; set; } = "#B56B45";
+            public string PrivateChatColor { get; set; } = "<color=#ADD7F6> ";
 
             [Description("Team chat color - Use hex to assign the color.")]
-            public string TeamChatColor { get; set; } = "#8BBEB2";
+            public string TeamChatColor { get; set; } = "<color=#3B28CC> ";
 
 
 
@@ -72,7 +72,7 @@ namespace ChatManagerUtility
                     case MessageType.Team:
                         return TeamChatColor;
                     default:
-                        return "#4C4C4C";
+                        return "<color=#4C4C4C> ";
                 }
             }
         }

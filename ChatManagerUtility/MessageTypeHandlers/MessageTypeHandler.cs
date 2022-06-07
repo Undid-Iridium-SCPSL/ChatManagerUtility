@@ -1,13 +1,14 @@
 ﻿using ChatManagerUtility.Configs;
+using Exiled.API.Features;
 using UnityEngine;
 namespace ChatManagerUtility
 {
     public class MessageTypeHandler
     {
-        readonly string InternalMsg;
-        readonly float InternalMsgTime;
-        readonly int InternalCharacterLimit;
-        readonly MessageType InternalMsgType;
+        string InternalMsg { get; set; }
+        float InternalMsgTime { get; set; }
+        int InternalCharacterLimit { get; set; }
+        MessageType InternalMsgType { get; set; }
 
         public string Msg
         {
@@ -36,10 +37,13 @@ namespace ChatManagerUtility
             InternalMsgTime = assignedMsgTime;
             InternalCharacterLimit = characterLimit;
             InternalMsgType = messageType;
-            InternalMsg = chatColor + currentMessage;
+            string temp = chatColor + currentMessage + "</color>";
+            InternalMsg = temp;
+            Log.Info($"What in the HELL was the current msg {InternalMsg}  vs temp {temp} and chat color {chatColor} and original msg {currentMessage}");
         }
 
-        
-        
+
+
+
     }
 }

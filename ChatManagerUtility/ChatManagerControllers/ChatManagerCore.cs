@@ -1,4 +1,6 @@
-﻿using Exiled.Events.EventArgs;
+﻿using Exiled.API.Features;
+using Exiled.Events.EventArgs;
+using MEC;
 
 namespace ChatManagerUtility
 {
@@ -29,9 +31,14 @@ namespace ChatManagerUtility
         public void OnVerified(VerifiedEventArgs ev)
         {
             if(ev.Player != null){
+                Log.Debug($"OnVerified loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
                 ChatManagerUpdater chatManagerUpdater = new ChatManagerUpdater(ev.Player);
                 //Thread thread = new Thread(new ThreadStart(ChatManagerParser));
                 ev.Player.SessionVariables.Add("ChatManagerToken", chatManagerUpdater);
+                Log.Debug($"OnVerified Finished", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+
+    
+                
             }
         }
 
@@ -39,9 +46,11 @@ namespace ChatManagerUtility
         {
             if (ev.Player != null)
             {
+                Log.Debug($"OnLeft loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
                 if (ev.Player.SessionVariables.TryGetValue("ChatManagerToken", out object ChatManager)){
                     ((ChatManagerUpdater)ChatManager).shutdown();
                     ev.Player.SessionVariables.Remove("ChatManagerToken");
+                    Log.Debug($"OnVerified Finished", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
                 }
             }
         }

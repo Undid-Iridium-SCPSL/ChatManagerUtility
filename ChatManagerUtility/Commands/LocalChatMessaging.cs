@@ -1,5 +1,6 @@
 ﻿using ChatManagerUtility.Events;
 using CommandSystem;
+using Exiled.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace ChatManagerUtility
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if(IncomingLocalMessage != null){
+                Log.Info($"Argument at 0 {arguments.At(0)}");
                 IncomingLocalMessage(new LocalMsgEventArgs(arguments.At(0)));
             }
             response = "Assume it was good";

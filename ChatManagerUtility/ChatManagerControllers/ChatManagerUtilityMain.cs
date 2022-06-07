@@ -16,7 +16,7 @@ namespace ChatManagerUtility
         public static bool isEnabledAtRuntime { get; set; }
 
         /// <summary>
-        /// Gets a static instance of the <see cref="RespawnControllerMain"/> class.
+        /// Gets a static instance of the <see cref="ChatManagerUtilityMain"/> class.
         /// </summary>
         public static ChatManagerUtilityMain Instance { get; private set; }
 
@@ -24,7 +24,7 @@ namespace ChatManagerUtility
         public override string Author => "Undid-Iridium";
 
         /// <inheritdoc />
-        public override string Name => "FastRespawnUtility";
+        public override string Name => "ChatManagerUtility";
 
         /// <inheritdoc />
         public override Version RequiredExiledVersion { get; } = new Version(5, 1, 3);
@@ -44,6 +44,7 @@ namespace ChatManagerUtility
             Instance = this;
             ChatManagerCoreMonitor = new ChatManagerCore();
             PlayerEvents.Verified += ChatManagerCoreMonitor.OnVerified;
+   
             PlayerEvents.Left += ChatManagerCoreMonitor.OnLeft;
             isEnabledAtRuntime = true;
             base.OnEnabled();
@@ -53,6 +54,7 @@ namespace ChatManagerUtility
         public override void OnDisabled()
         {
             PlayerEvents.Verified -= ChatManagerCoreMonitor.OnVerified;
+       
             PlayerEvents.Left -= ChatManagerCoreMonitor.OnLeft;
             isEnabledAtRuntime = false;
             ChatManagerCoreMonitor = null;
