@@ -44,8 +44,9 @@ namespace ChatManagerUtility
             Instance = this;
             ChatManagerCoreMonitor = new ChatManagerCore();
             PlayerEvents.Verified += ChatManagerCoreMonitor.OnVerified;
-   
             PlayerEvents.Left += ChatManagerCoreMonitor.OnLeft;
+            ServerEvents.RoundEnded += ChatManagerCoreMonitor.OnEndRound;
+            ServerEvents.RestartingRound += ChatManagerCoreMonitor.OnRestarting;
             isEnabledAtRuntime = true;
             base.OnEnabled();
         }
@@ -54,8 +55,9 @@ namespace ChatManagerUtility
         public override void OnDisabled()
         {
             PlayerEvents.Verified -= ChatManagerCoreMonitor.OnVerified;
-       
             PlayerEvents.Left -= ChatManagerCoreMonitor.OnLeft;
+            ServerEvents.RoundEnded -= ChatManagerCoreMonitor.OnEndRound;
+            ServerEvents.RestartingRound += ChatManagerCoreMonitor.OnRestarting;
             isEnabledAtRuntime = false;
             ChatManagerCoreMonitor = null;
             Instance = null;

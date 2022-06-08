@@ -27,6 +27,10 @@ namespace ChatManagerUtility
 
         public static event LocalMsgEventHandler IncomingLocalMessage;
 
+        /// <summary>
+        /// Handles incoming messages from client console for Local messages. 
+        /// </summary>
+        /// <returns></returns>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             

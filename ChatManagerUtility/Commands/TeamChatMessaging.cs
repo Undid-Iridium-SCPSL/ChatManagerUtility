@@ -27,6 +27,10 @@ namespace ChatManagerUtility
 
         public static event TeamMsgEventHandler IncomingTeamMessage;
 
+        /// <summary>
+        /// Handles incoming messages from client console for Team messages. 
+        /// </summary>
+        /// <returns></returns>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
 

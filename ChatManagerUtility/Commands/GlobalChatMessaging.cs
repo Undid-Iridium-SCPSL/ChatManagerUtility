@@ -27,6 +27,10 @@ namespace ChatManagerUtility
 
         public static event GlobalMsgEventHandler IncomingGlobalMessage;
 
+        /// <summary>
+        /// Handles incoming messages from client console for Global messages. 
+        /// </summary>
+        /// <returns></returns>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
 

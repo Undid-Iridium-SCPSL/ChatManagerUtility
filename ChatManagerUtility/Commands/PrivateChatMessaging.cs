@@ -27,6 +27,10 @@ namespace ChatManagerUtility
 
         public static event PrivateMsgEventHandler IncomingPrivateMessage;
 
+        /// <summary>
+        /// Handles incoming messages from client console for private messages. 
+        /// </summary>
+        /// <returns></returns>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!ChatManagerUtilityMain.Instance.Config.MsgTypesAllowed.Contains(Configs.MessageType.PRIVATE))

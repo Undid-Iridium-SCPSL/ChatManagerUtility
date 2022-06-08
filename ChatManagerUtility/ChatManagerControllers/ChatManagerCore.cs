@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs;
 using MEC;
+using System;
 
 namespace ChatManagerUtility
 {
@@ -14,7 +15,7 @@ namespace ChatManagerUtility
         /// <summary>
         /// 
         /// </summary>
-        public ChatManagerCore(){
+        public ChatManagerCore() {
             isRunning = true;
         }
 
@@ -26,19 +27,16 @@ namespace ChatManagerUtility
             isRunning = false;
         }
 
-       
+
 
         public void OnVerified(VerifiedEventArgs ev)
         {
-            if(ev.Player != null){
+            if (ev.Player != null) {
                 Log.Debug($"OnVerified loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
                 ChatManagerUpdater chatManagerUpdater = new ChatManagerUpdater(ev.Player);
                 //Thread thread = new Thread(new ThreadStart(ChatManagerParser));
                 ev.Player.SessionVariables.Add("ChatManagerToken", chatManagerUpdater);
                 Log.Debug($"OnVerified Finished", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
-
-    
-                
             }
         }
 
@@ -47,10 +45,28 @@ namespace ChatManagerUtility
             if (ev.Player != null)
             {
                 Log.Debug($"OnLeft loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
-                if (ev.Player.SessionVariables.TryGetValue("ChatManagerToken", out object ChatManager)){
-                    ((ChatManagerUpdater)ChatManager).shutdown();
+                if (ev.Player.SessionVariables.TryGetValue("ChatManagerToken", out object ChatManager)) {
+                    ((ChatManagerUpdater)ChatManager).Shutdown();
                     ev.Player.SessionVariables.Remove("ChatManagerToken");
-                    Log.Debug($"OnVerified Finished", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+                    Log.Debug($"OnLeft Finished", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+                }
+            }
+        }
+
+        internal void OnRestarting()
+        {
+            OnEndRound(null);
+        }
+
+        internal void OnEndRound(RoundEndedEventArgs ev)
+        {
+            Log.Debug($"OnEndRound loaded in", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
+            foreach (Player player in Player.List){
+                if (player.SessionVariables.TryGetValue("ChatManagerToken", out object ChatManager))
+                {
+                    Timing.CallDelayed(3f, delegate { ((ChatManagerUpdater)ChatManager).Shutdown(); });
+                    player.SessionVariables.Remove("ChatManagerToken");
+                    Log.Debug($"OnEndRound Finished", ChatManagerUtilityMain.Instance.Config.IsDebugEnabled);
                 }
             }
         }

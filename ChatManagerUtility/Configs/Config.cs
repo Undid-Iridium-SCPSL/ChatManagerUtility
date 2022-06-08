@@ -69,6 +69,18 @@ namespace ChatManagerUtility
         public HashSet<MessageType> MsgTypesAllowed { get; set; } = new HashSet<MessageType>() { MessageType.GLOBAL, MessageType.LOCAL, MessageType.PRIVATE, MessageType.TEAM };
 
         /// <summary>
+        /// Disables or enables sending to client console
+        /// </summary>
+        [Description("Whether to send the messages to console")]
+        public bool SendToConsole { get; set; } = false;
+
+        /// <summary>
+        /// Disables or enables sending to client hint system
+        /// </summary>
+        [Description("Whether to send the messages to hint system")]
+        public bool SendToHintSystem { get; set; } = true;
+
+        /// <summary>
         /// Thet type of colors to use for the hint system, console does not accept the same as far as I can tell.
         /// </summary>
         [Description("Chat colors")]

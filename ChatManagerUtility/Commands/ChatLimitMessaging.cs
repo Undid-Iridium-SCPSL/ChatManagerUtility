@@ -23,6 +23,10 @@ namespace ChatManagerUtility.Commands
 
         public static event ChatLimitEventHandler IncomingChatLimitMessage;
 
+        /// <summary>
+        /// Handles incoming messages from client console for individuals to subscribe/unsubscribe from streams (channels).
+        /// </summary>
+        /// <returns></returns>
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if(arguments.Count == 0){
